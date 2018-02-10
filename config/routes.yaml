@@ -1,0 +1,18 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+login:
+    path: /login
+    controller: App\Controller\DefaultController::login
+files:
+    path: /h
+    controller: App\Controller\DefaultController::files
+show_file:
+    path: /h/{file}
+    controller: App\Controller\DefaultController::showRawFile
+    requirements:
+        file: .+
+connector:
+    path: /connector
+    controller: App\Controller\DefaultController::connector
+
