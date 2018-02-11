@@ -115,11 +115,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.6/SmoothScroll.min.js"></script>
 
 <!-- JS Implementing Plugins -->
-<script src="https://web-assets.orbitrondev.org/unify-2.5/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 
 <!-- JS Unify -->
 <script src="https://web-assets.orbitrondev.org/unify-2.5/js/hs.core.js"></script>
-
+<script src="https://web-assets.orbitrondev.org/unify-2.5/vendor/hs-megamenu/src/hs.megamenu.js"></script>
 <script src="https://web-assets.orbitrondev.org/unify-2.5/js/components/hs.header-side.js"></script>
 <script src="https://web-assets.orbitrondev.org/unify-2.5/js/helpers/hs.hamburgers.js"></script>
 
@@ -138,6 +138,28 @@
             event: 'hover',
             direction: 'vertical',
             breakpoint: 991
+        });
+    });
+</script>
+<script>
+    window.addEventListener('load', function() {
+        window.cookieconsent.initialise({
+            'palette': {
+                'popup': {
+                    'background': '#252e39'
+                },
+                'button': {
+                    'background': '#14a7d0'
+                }
+            },
+            law: {
+                // Only show information if needed in the country
+                regionalLaw: false
+            },
+            location: {
+                // 'freegeoip' has to be taken out, as it is not avilable anymore
+                services: ['ipinfo', 'maxmind']
+            }
         });
     });
 </script>
