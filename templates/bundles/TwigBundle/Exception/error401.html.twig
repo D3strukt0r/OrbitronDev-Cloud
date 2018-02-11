@@ -1,18 +1,18 @@
 {% extends 'bundles/TwigBundle/Exception/layout.html.twig' %}
 
-{% block title %}{{ '401 Unauthorized'|trans }} | {{ parent() }}{% endblock %}
+{% trans_default_domain 'error' %}
+
+{% block title %}401 {{ '401.title'|trans }} | {{ parent() }}{% endblock %}
 
 {% block content %}
     <div class="g-font-size-180 g-font-size-240--sm g-font-size-420--lg g-line-height-1 g-font-weight-200 g-color-gray-dark-v2">401</div>
 
     <div class="g-absolute-centered">
-        <h1 class="g-font-weight-200 g-mb-20">{{ 'Unauthorized'|trans }}</h1>
-        <p class="g-color-white-opacity-0_6 g-font-size-18">{{ 'This server could not verify that you are authorized to access the URL "' ~ app.request.server.get('http-referer')|default('/') ~ '".
-                            You either supplied the wrong credentials (e.g., bad password), or your browser doesn\'t understand how to supply the credentials required.
-                            In case you are allowed to request the document, please check your user-id and password and try again.'|trans }}</p>
-        <p class="g-color-white-opacity-0_6 g-font-size-18">If you think this is a problem with us, please&nbsp;<a href="mailto:info@orbitrondev.org" class="g-color-white g-color-primary--hover g-text-no-underline--hover">tell us</a>.</p>
-        <p class="g-color-white-opacity-0_6 g-font-size-18 mb-0">Here is a link to the <a href="{{ path('index') }}" class="g-color-white g-color-primary--hover g-text-no-underline--hover">home page</a>.</p>
-        <p class="g-color-white-opacity-0_6 g-font-size-18">Here is a link to <a href="javascript:window.history.back();" class="g-color-white g-color-primary--hover g-text-no-underline--hover">go back</a>.</p>
-        <p class="g-color-white-opacity-0_6 g-font-size-10 mb-0">Server message: [Code: {{ status_code }}] {{ status_text }}</p>
+        <h1 class="g-font-weight-200 g-mb-20">{{ '401.title'|trans }}</h1>
+        <p class="g-color-white-opacity-0_6 g-font-size-18">{{ '401.message'|trans({'%referer_url%': app.request.server.get('http-referer')|default('/')}) }}</p>
+        <p class="g-color-white-opacity-0_6 g-font-size-18">{{ 'general.contact'|trans({'%link%': '<a href="mailto:info@orbitrondev.org" class="g-color-white g-color-primary--hover g-text-no-underline--hover">', '%/link%': '</a>'}) }}If you think this is a problem with us, please&nbsp;tell us.</p>
+        <p class="g-color-white-opacity-0_6 g-font-size-18 mb-0">{{ 'general.link_home'|trans({'%link%': '<a href="' ~ path('index') ~ '" class="g-color-white g-color-primary--hover g-text-no-underline--hover">', '%/link%': '</a>'}) }}</p>
+        <p class="g-color-white-opacity-0_6 g-font-size-18">{{ 'general.link_back'|trans({'%link%': '<a href="javascript:window.history.back();" class="g-color-white g-color-primary--hover g-text-no-underline--hover">', '%/link%': '</a>'}) }}</p>
+        <p class="g-color-white-opacity-0_6 g-font-size-10 mb-0">{{ 'general.server_message'|trans({'%code%': status_code, '%text%': status_text}) }}</p>
     </div>
 {% endblock %}
