@@ -13,31 +13,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
 {
-    /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param int                                        $user_id
-     *
-     * @return array
-     */
-    private function getDataFromToken(ObjectManager $em, int $user_id): array
+    private function getDataFromToken(): array
     {
-        $provider = new GenericProvider([
-            'clientId'                => getenv('OAUTH_CLIENT_ID'),
-            'clientSecret'            => getenv('OAUTH_CLIENT_SECRET'),
-            'redirectUri'             => getenv('OAUTH_REDIRECT_URI'),
-            'scopes'                  => 'user:email user:username user:id',
-            'urlAuthorize'            => getenv('OAUTH_URL_AUTHORIZE'),
-            'urlAccessToken'          => getenv('OAUTH_URL_ACCESS_TOKEN'),
-            'urlResourceOwnerDetails' => getenv('OAUTH_URL_RESOURCE'),
-        ]);
-
-        /** @var User $user */
-        $user = $em->getRepository(User::class)->findOneBy(['remote_id' => $user_id]);
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
         /** @var \League\OAuth2\Client\Token\AccessToken $accessToken */
         $accessToken = unserialize($user->getTokenData());
+
+        $client = $this->get('knpu.oauth2.client.orbitrondev');
+        // access the underlying "provider" from league/oauth2-client
+        $provider = $client->getOAuth2Provider();
 
         if ($accessToken->hasExpired()) {
             $accessToken = $provider->getAccessToken('refresh_token', [
@@ -45,124 +34,47 @@ class DefaultController extends Controller
             ]);
 
             // Purge old access token and store new access token to your data store.
-            /** @var User $user */
-            $user = $em->getRepository(User::class)->findOneBy(['remote_id' => $user_id]);
             $user->setTokenData(serialize($accessToken));
-            $em->flush();
+            $this->getDoctrine()->getManager()->flush();
         }
 
-        $resourceOwner = $provider->getResourceOwner($accessToken);
+        //$scopes = ['user:email', 'user:username', 'user:id'];
+        //$client->redirect($scopes);
+
+        // get access token and then user
+        $resourceOwner = $client->fetchUserFromToken($accessToken);
         return $resourceOwner->toArray();
     }
 
-    public function index(SessionInterface $session)
+    public function index()
     {
-        if (!$session->has('LOGIN')) {
+        /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUser $user */
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
         } else {
             return $this->redirectToRoute('files');
         }
     }
 
-    public function login(Request $request, SessionInterface $session)
+    public function files()
     {
-        $provider = new GenericProvider([
-            'clientId'                => getenv('OAUTH_CLIENT_ID'),
-            'clientSecret'            => getenv('OAUTH_CLIENT_SECRET'),
-            'redirectUri'             => getenv('OAUTH_REDIRECT_URI'),
-            'scopes'                  => 'user:email user:username user:id',
-            'urlAuthorize'            => getenv('OAUTH_URL_AUTHORIZE'),
-            'urlAccessToken'          => getenv('OAUTH_URL_ACCESS_TOKEN'),
-            'urlResourceOwnerDetails' => getenv('OAUTH_URL_RESOURCE'),
-        ]);
-
-        // If we don't have an authorization code then get one
-        if (!$request->query->has('code')) {
-
-            // Fetch the authorization URL from the provider; this returns the
-            // urlAuthorize option and generates and applies any necessary parameters
-            // (e.g. state).
-            $authorizationUrl = $provider->getAuthorizationUrl();
-
-            // Get the state generated for you and store it to the session.
-            $session->set('oauth2state', $provider->getState());
-
-            // Redirect the user to the authorization URL.
-            return new RedirectResponse($authorizationUrl);
-
-            // Check given state against previously stored one to mitigate CSRF attack
-        } elseif (empty($request->query->get('state')) || ($session->has('oauth2state') && $request->query->get('state') !== $session->get('oauth2state'))) {
-
-            if ($session->has('oauth2state')) {
-                $session->remove('oauth2state');
-            }
-
-            return new Response('Invalid state. <a href="'.$this->generateUrl('login').'">Try again</a>');
-
-        } else {
-
-            try {
-
-                // Try to get an access token using the authorization code grant.
-                $accessToken = $provider->getAccessToken('authorization_code', [
-                    'code' => $request->query->get('code'),
-                ]);
-
-                // Using the access token, we may look up details about the
-                // resource owner.
-                $resourceOwner = $provider->getResourceOwner($accessToken);
-                $data = $resourceOwner->toArray();
-
-                $em = $this->getDoctrine()->getManager();
-                /** @var User $user */
-                $user = $em->getRepository(User::class)->findOneBy(['remote_id' => $data['id']]);
-                if (is_null($user)) {
-                    $user = (new User())
-                        ->setRemoteId($data['id'])
-                        ->setUsername($data['username'])
-                        ->setEmail($data['email'])
-                        ->setTokenData(serialize($accessToken));
-                    $em->persist($user);
-                } else {
-                    $user->setTokenData(serialize($accessToken));
-                }
-                $em->flush();
-
-                // TODO: Find a better way for login
-                $session->set('LOGIN', $user->getRemoteId());
-
-                return new RedirectResponse($this->generateUrl('files'));
-
-            } catch (IdentityProviderException $e) {
-
-                // Failed to get the access token or user details.
-                return new Response('<pre>Error: '.$e->getMessage().'</pre>');
-
-            }
-
-        }
-    }
-
-    public function files(SessionInterface $session)
-    {
-        if (!$session->has('LOGIN')) {
+        /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUser $user */
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
         }
 
         return $this->render('files.html.twig');
     }
 
-    public function showRawFile(SessionInterface $session, $file)
+    public function showRawFile($file)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        if (!$session->has('LOGIN')) {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
         }
-
-        $data = $this->getDataFromToken($em, $session->get('LOGIN'));
-        /** @var User $user */
-        $user = $em->getRepository(User::class)->findOneBy(['remote_id' => $data['id']]);
 
         $extensionToMime = [
             'pdf'  => 'application/pdf',
@@ -187,16 +99,13 @@ class DefaultController extends Controller
         return $response;
     }
 
-    public function connector(SessionInterface $session)
+    public function connector()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        if (!$session->has('LOGIN')) {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
             return $this->json([]);
         }
-        $data = $this->getDataFromToken($em, $session->get('LOGIN'));
-        /** @var User $user */
-        $user = $em->getRepository(User::class)->findOneBy(['remote_id' => $data['id']]);
 
         // Create directories
         $rootCloudDir = $this->get('kernel')->getProjectDir().'/var/data/storage/'.$user->getRemoteId();

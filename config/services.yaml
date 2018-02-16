@@ -26,3 +26,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            # - 'mysql:dbname=mydatabase'
+            # - { db_username: myuser, db_password: mypassword }
+
+            # If you're using Doctrine & want to re-use that connection, then:
+            # comment-out the above 2 lines and uncomment the line below
+            - !service { class: PDO, factory: 'database_connection:getWrappedConnection' }

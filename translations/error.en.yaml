@@ -5,7 +5,7 @@ general:
     server_message: 'Server message: [Code: %code%] %text%'
 401:
     title: 'Unauthorized'
-    message: 'This server could not verify that you are authorized to access the URL "%referer_url%". You either supplied the wrong credentials (e.g., bad password), or your browser doesn\'t understand how to supply the credentials required. In case you are allowed to request the document, please check your user-id and password and try again.'
+    message: "This server could not verify that you are authorized to access the URL \"%referer_url%\". You either supplied the wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required. In case you are allowed to request the document, please check your user-id and password and try again."
 403:
     title: 'Forbidden'
     message: "You don't have permission to access the requested directory. There is either no index document or the directory is read-protected."

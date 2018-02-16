@@ -3,7 +3,11 @@ index:
     controller: App\Controller\DefaultController::index
 login:
     path: /login
-    controller: App\Controller\DefaultController::login
+    controller: App\Controller\UserController::login
+login_check:
+    path: /login-check
+logout:
+    path: /logout
 files:
     path: /h
     controller: App\Controller\DefaultController::files
@@ -16,3 +20,6 @@ connector:
     path: /connector
     controller: App\Controller\DefaultController::connector
 
+setup:
+    path: /setup
+    controller: App\Controller\SetupController::setup
