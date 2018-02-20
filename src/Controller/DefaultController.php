@@ -24,7 +24,9 @@ class DefaultController extends Controller
         /** @var \League\OAuth2\Client\Token\AccessToken $accessToken */
         $accessToken = unserialize($user->getTokenData());
 
-        $client = $this->get('knpu.oauth2.client.orbitrondev');
+        $registry = $this->get('oauth2.registry');
+        $currentClient = $this->get('kernel')->getEnvironment() === 'prod' ? 'orbitrondev' : 'orbitrondev_dev';
+        $client = $registry->getClient($currentClient);
         // access the underlying "provider" from league/oauth2-client
         $provider = $client->getOAuth2Provider();
 

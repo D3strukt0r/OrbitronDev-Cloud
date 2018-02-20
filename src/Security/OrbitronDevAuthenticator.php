@@ -9,6 +9,7 @@ use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -20,12 +21,14 @@ class OrbitronDevAuthenticator extends SocialAuthenticator
     private $clientRegistry;
     private $em;
     private $router;
+    private $kernel;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router)
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, KernelInterface $kernel)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -190,6 +193,7 @@ class OrbitronDevAuthenticator extends SocialAuthenticator
      */
     private function getClient()
     {
-        return $this->clientRegistry->getClient('orbitrondev');
+        $client = $this->kernel->getEnvironment() === 'prod' ? 'orbitrondev' : 'orbitrondev_dev';
+        return $this->clientRegistry->getClient($client);
     }
 }

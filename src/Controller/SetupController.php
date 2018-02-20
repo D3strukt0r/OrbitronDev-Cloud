@@ -11,7 +11,7 @@ class SetupController extends Controller
 {
     public function setup(Request $request, PdoSessionHandler $sessionHandlerService)
     {
-        if ($request->query->get('key') == getenv('SETUP_KEY')) {
+        if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
             if ($request->query->get('action') == 'add-session-table') {
                 try {
                     $sessionHandlerService->createTable();
@@ -21,6 +21,8 @@ class SetupController extends Controller
                     return new Response('Session database not created');
                 }
             }
+            return $this->createNotFoundException();
         }
+        return $this->createAccessDeniedException();
     }
 }
