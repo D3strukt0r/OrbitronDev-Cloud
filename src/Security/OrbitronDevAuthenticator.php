@@ -23,8 +23,12 @@ class OrbitronDevAuthenticator extends SocialAuthenticator
     private $router;
     private $kernel;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, KernelInterface $kernel)
-    {
+    public function __construct(
+        ClientRegistry $clientRegistry,
+        EntityManagerInterface $em,
+        RouterInterface $router,
+        KernelInterface $kernel
+    ) {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;

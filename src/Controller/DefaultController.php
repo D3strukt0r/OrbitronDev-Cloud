@@ -2,17 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
 use elFinder;
 use elFinderConnector;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Provider\GenericProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
