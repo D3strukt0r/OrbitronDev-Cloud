@@ -10,8 +10,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
 {
-    private function getDataFromToken(): array
+    private $cachedData;
+    private $dataWasLoaded = false;
+
+    private function getDataFromToken($updateCache = false): array
     {
+        if (!$updateCache && is_array($this->cachedData)) {
+            return $this->cachedData;
+        }
+
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         /** @var \League\OAuth2\Client\Token\AccessToken $accessToken */
@@ -33,12 +40,28 @@ class DefaultController extends Controller
             $this->getDoctrine()->getManager()->flush();
         }
 
-        //$scopes = ['user:email', 'user:username', 'user:id'];
-        //$client->redirect($scopes);
-
         // get access token and then user
         $resourceOwner = $client->fetchUserFromToken($accessToken);
-        return $resourceOwner->toArray();
+        $this->dataWasLoaded = true;
+        $this->cachedData = $resourceOwner->toArray();
+        return $this->cachedData;
+    }
+
+    private function askForPermission(array $scopes)
+    {
+        $registry = $this->get('oauth2.registry');
+        $currentClient = $this->get('kernel')->getEnvironment() === 'prod' ? 'orbitrondev' : 'orbitrondev_dev';
+        $client = $registry->getClient($currentClient);
+
+        return $client->redirect($scopes);
+    }
+
+    private function hasAccessToData($data)
+    {
+        if (!$this->dataWasLoaded) {
+            $data = $this->getDataFromToken();
+        }
+        return array_key_exists($data, $this->cachedData);
     }
 
     public function index()

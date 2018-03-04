@@ -4,7 +4,7 @@ knpu_oauth2_client:
         # an instance of: KnpU\OAuth2ClientBundle\Client\OAuth2Client
         orbitrondev:
             type: generic
-            provider_class: OrbitronDev\OAuth2\Client\Provider\OrbitronDev
+            provider_class: OrbitronDev\OAuth2\Client\Provider\OrbitronDevProvider
 
             # optional: a class that extends OAuth2Client
             # client_class: Some\Custom\Client
@@ -21,17 +21,14 @@ knpu_oauth2_client:
         # an instance of: KnpU\OAuth2ClientBundle\Client\OAuth2Client
         orbitrondev_dev:
             type: generic
-            #provider_class: League\OAuth2\Client\Provider\GenericProvider
-            provider_class: App\Provider\OrbitronDev
+            provider_class: OrbitronDev\OAuth2\Client\Provider\OrbitronDevProvider
 
             # optional: a class that extends OAuth2Client
             # client_class: Some\Custom\Client
 
             # optional: if your provider has custom constructor options
-            #provider_options:
-            #    urlAuthorize: 'http://account.localhost/oauth/authorize'
-            #    urlAccessToken: 'http://account.localhost/oauth/token'
-            #    urlResourceOwnerDetails: 'http://account.localhost/oauth/resource'
+            provider_options:
+                host: 'http://account.localhost'
 
             # now, all the normal options!
             client_id: '%env(OAUTH_CLIENT_ID)%'
