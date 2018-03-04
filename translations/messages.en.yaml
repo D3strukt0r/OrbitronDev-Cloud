@@ -4,4 +4,6 @@ general:
         files: 'Files'
         support: 'Support'
         faq: 'FAQ'
+        settings: 'Settings'
+        logout: 'Logout'
     copyright: '2018 © All Rights Reserved.'

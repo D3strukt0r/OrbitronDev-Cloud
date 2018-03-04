@@ -68,6 +68,17 @@
                                 <li class="nav-item g-my-5"><a href="{{ path('files') }}" class="nav-link">{{ 'general.link.files'|trans }}</a></li>
                                 <li class="nav-item g-my-5"><a href="#!" class="nav-link">{{ 'general.link.support'|trans }}</a></li>
                                 <li class="nav-item g-my-5"><a href="#!" class="nav-link">{{ 'general.link.faq'|trans }}</a></li>
+                                {% if app.user.id > -1 %}
+                                    <li class="nav-item hs-has-sub-menu g-my-5">
+                                        <a href="https://account.orbitrondev.org" class="nav-link" id="nav-link-1" aria-haspopup="true" aria-expanded="false" aria-controls="nav-submenu-1">{{ app.user.username }}</a>
+                                        <!-- Submenu -->
+                                        <ul class="hs-sub-menu list-unstyled animated" id="nav-submenu-1" aria-labelledby="nav-link-1" style="display: none;">
+                                            <li><a href="https://account.orbitrondev.org">{{ 'general.link.settings'|trans }}</a></li>
+                                            <li><a href="{{ path('logout') }}">{{ 'general.link.logout'|trans }}</a></li>
+                                        </ul>
+                                        <!-- End Submenu -->
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
                         <!-- End Navigation -->
