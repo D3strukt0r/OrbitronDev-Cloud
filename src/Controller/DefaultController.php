@@ -228,7 +228,6 @@ class DefaultController extends Controller
         ];
 
         // Run elFinder
-        header('Access-Control-Allow-Origin: *');
         $connector = new elFinderConnector(new elFinder($opts));
         $connector->run();
         exit;
