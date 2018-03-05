@@ -125,7 +125,7 @@ class OrbitronDevAuthenticator extends SocialAuthenticator
     {
         /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUserProvider $userProvider */
 
-        /** @var \App\Provider\OrbitronDevResourceOwner $originUser */
+        /** @var \OrbitronDev\OAuth2\Client\Provider\OrbitronDevResourceOwner $originUser */
         $originUser = $this->getClient()->fetchUserFromToken($credentials);
 
         // 1) have they logged in with Facebook before? Easy!
