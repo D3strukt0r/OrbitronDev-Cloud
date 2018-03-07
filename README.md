@@ -36,7 +36,6 @@ Next, rename `.env.dist` to `.env` and change following parameters:
 # Create a Dev App on orbitrondev.org and insert info here
 OAUTH_CLIENT_ID="app_id"
 OAUTH_CLIENT_SECRET=app_secret
-OAUTH_REDIRECT_URI=https://localhost/login
 
 DATABASE_URL=... (Accessing databse)
 ```
