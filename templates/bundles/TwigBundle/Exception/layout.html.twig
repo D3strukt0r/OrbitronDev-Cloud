@@ -8,10 +8,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="description" content="{% block description %}The official site of OrbitronDev. Containing all projects and everything about us.{% endblock %}" />
+    <meta name="description" content="{% block description %}{% endblock %}" />
     <meta name="author" content="OrbitronDev" />
     <meta name="publisher" content="OrbitronDev" />
-    <meta name="copyright" content="OrbitronDev &copy; 2013-2017" />
+    <meta name="copyright" content="{{ 'general.copyright'|trans }}" />
     <meta name="keywords" content="" />
     <meta name="audience" content="Alle" />
     <meta name="robots" content="NOINDEX,NOFOLLOW" />
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-2.5/css/unify-globals.css" />
 
     <!-- CSS Customization -->
-    <link rel="stylesheet" href="/css/custom.css?v=28-12-2017" />
+    <link rel="stylesheet" href="/css/custom.css?v={{ "now"|date("d-m-Y") }}" />
 </head>
 
 <body class="g-bg-gray-dark-v1 g-color-white">
@@ -48,7 +48,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 <!-- JS Custom -->
-<script src="/js/custom.js?v=28-12-2017"></script>
+<script src="/js/custom.js?v={{ "now"|date("d-m-Y") }}"></script>
 
 <!--[if lt IE 9]>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>

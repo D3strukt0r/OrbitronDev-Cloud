@@ -39,7 +39,7 @@
 
     <!-- CSS Customization -->
     {% block stylesheets %}{% endblock %}
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/custom.css?v={{ "now"|date("d-m-Y") }}">
 </head>
 
 <body class="u-body--header-side-static-left">
@@ -135,7 +135,7 @@
 <script src="https://web-assets.orbitrondev.org/unify-2.5/js/helpers/hs.hamburgers.js"></script>
 
 <!-- JS Custom -->
-<script src="/js/custom.js"></script>
+<script src="/js/custom.js?v={{ "now"|date("d-m-Y") }}"></script>
 
 <!-- JS Plugins Init. -->
 <script>
@@ -152,28 +152,8 @@
         });
     });
 </script>
-<script>
-    window.addEventListener('load', function() {
-        window.cookieconsent.initialise({
-            'palette': {
-                'popup': {
-                    'background': '#252e39'
-                },
-                'button': {
-                    'background': '#14a7d0'
-                }
-            },
-            law: {
-                // Only show information if needed in the country
-                regionalLaw: false
-            },
-            location: {
-                // 'freegeoip' has to be taken out, as it is not avilable anymore
-                services: ['ipinfo', 'maxmind']
-            }
-        });
-    });
-</script>
+{% include '_cookie_notice.html.twig' %}
+{% include '_analytics.html.twig' %}
 {% block javascripts %}{% endblock %}
 
 <!--[if lt IE 9]>
