@@ -66,7 +66,7 @@ class DefaultController extends Controller
 
     public function index()
     {
-        /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUser $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -77,7 +77,7 @@ class DefaultController extends Controller
 
     public function files()
     {
-        /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUser $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -88,7 +88,7 @@ class DefaultController extends Controller
 
     public function showRawFile($file)
     {
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -119,7 +119,7 @@ class DefaultController extends Controller
 
     public function connector()
     {
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->json([]);
