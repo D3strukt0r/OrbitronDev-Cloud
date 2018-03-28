@@ -1,4 +1,10 @@
 {
+    "deployer/deployer": {
+        "version": "v6.1.0"
+    },
+    "deployer/phar-update": {
+        "version": "v2.1.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -56,9 +62,6 @@
     "doctrine/orm": {
         "version": "v2.6.0"
     },
-    "easycorp/easy-deploy-bundle": {
-        "version": "v1.0.2"
-    },
     "guzzlehttp/guzzle": {
         "version": "6.3.0"
     },
@@ -94,6 +97,9 @@
     },
     "paragonie/random_compat": {
         "version": "v2.0.11"
+    },
+    "pimple/pimple": {
+        "version": "v3.2.3"
     },
     "psr/cache": {
         "version": "1.0.1"
