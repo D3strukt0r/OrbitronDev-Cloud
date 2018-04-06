@@ -206,8 +206,8 @@ class DefaultController extends Controller
                     'URL'           => '/h/',                       // URL to files (REQUIRED)
                     'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
                     'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny'    => ['all'],                     // All Mimetypes not allowed to upload
-                    'uploadAllow'   => ['image', 'text/plain'],     // Mimetype `image` and `text/plain` allowed to upload
+                    'uploadDeny'    => [],                          // All Mimetypes not allowed to upload
+                    'uploadAllow'   => ['all'],                     // Mimetype `image` and `text/plain` allowed to upload
                     'uploadOrder'   => ['deny', 'allow'],           // allowed Mimetype `image` and `text/plain` only
                     'accessControl' => $accessFunction,             // disable and hide dot starting files (OPTIONAL)
                 ],
@@ -219,8 +219,8 @@ class DefaultController extends Controller
                     'path'          => realpath($rootCloudDir.'/.trash'),
                     'tmbURL'        => '../var/data/storage/'.$user->getRemoteId().'/.trash/.tmb',
                     'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny'    => ['all'],                     // Recommend the same settings as the original volume that uses the trash
-                    'uploadAllow'   => ['image', 'text/plain'],     // Same as above
+                    'uploadDeny'    => [],                          // Recommend the same settings as the original volume that uses the trash
+                    'uploadAllow'   => ['all'],                     // Same as above
                     'uploadOrder'   => ['deny', 'allow'],           // Same as above
                     'accessControl' => $accessFunction,             // Same as above
                 ]
