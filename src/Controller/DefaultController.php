@@ -25,7 +25,7 @@ class DefaultController extends Controller
         $accessToken = unserialize($user->getTokenData());
 
         $registry = $this->get('oauth2.registry');
-        $currentClient = $this->get('kernel')->getEnvironment() === 'prod' ? 'orbitrondev' : 'orbitrondev_dev';
+        $currentClient = 'prod' === $this->get('kernel')->getEnvironment() ? 'orbitrondev' : 'orbitrondev_dev';
         $client = $registry->getClient($currentClient);
         // access the underlying "provider" from league/oauth2-client
         $provider = $client->getOAuth2Provider();
@@ -44,13 +44,14 @@ class DefaultController extends Controller
         $resourceOwner = $client->fetchUserFromToken($accessToken);
         $this->dataWasLoaded = true;
         $this->cachedData = $resourceOwner->toArray();
+
         return $this->cachedData;
     }
 
     private function askForPermission(array $scopes)
     {
         $registry = $this->get('oauth2.registry');
-        $currentClient = $this->get('kernel')->getEnvironment() === 'prod' ? 'orbitrondev' : 'orbitrondev_dev';
+        $currentClient = 'prod' === $this->get('kernel')->getEnvironment() ? 'orbitrondev' : 'orbitrondev_dev';
         $client = $registry->getClient($currentClient);
 
         return $client->redirect($scopes);
@@ -61,6 +62,7 @@ class DefaultController extends Controller
         if (!$this->dataWasLoaded) {
             $data = $this->getDataFromToken();
         }
+
         return array_key_exists($data, $this->cachedData);
     }
 
@@ -70,9 +72,9 @@ class DefaultController extends Controller
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
-        } else {
-            return $this->redirectToRoute('files');
         }
+
+        return $this->redirectToRoute('files');
     }
 
     public function files()
@@ -95,16 +97,16 @@ class DefaultController extends Controller
         }
 
         $extensionToMime = [
-            'pdf'  => 'application/pdf',
-            'zip'  => 'application/zip',
-            'gif'  => 'image/gif',
-            'jpg'  => 'image/jpeg',
-            'png'  => 'image/png',
-            'css'  => 'text/css',
+            'pdf' => 'application/pdf',
+            'zip' => 'application/zip',
+            'gif' => 'image/gif',
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'css' => 'text/css',
             'html' => 'text/html',
-            'js'   => 'text/javascript',
-            'txt'  => 'text/plain',
-            'xml'  => 'text/xml',
+            'js' => 'text/javascript',
+            'txt' => 'text/plain',
+            'xml' => 'text/xml',
         ];
 
         $fileDir = $this->get('kernel')->getProjectDir().'/var/data/storage/'.$user->getRemoteId().'/'.$file;
@@ -142,14 +144,14 @@ class DefaultController extends Controller
         elFinder::$netDrivers['dropbox2'] = 'Dropbox2';
         // // Dropbox2 Netmount driver need next two settings. You can get at https://www.dropbox.com/developers/apps
         // // AND reuire regist redirect url to "YOUR_CONNECTOR_URL?cmd=netmount&protocol=dropbox2&host=1"
-        define('ELFINDER_DROPBOX_APPKEY',    getenv('ELFINDER_DROPBOX_APPKEY'));
+        define('ELFINDER_DROPBOX_APPKEY', getenv('ELFINDER_DROPBOX_APPKEY'));
         define('ELFINDER_DROPBOX_APPSECRET', getenv('ELFINDER_DROPBOX_APPSECRET'));
         // ===============================================
         // // Enable network mount
         elFinder::$netDrivers['googledrive'] = 'GoogleDrive';
         // // GoogleDrive Netmount driver need next two settings. You can get at https://console.developers.google.com
         // // AND reuire regist redirect url to "YOUR_CONNECTOR_URL?cmd=netmount&protocol=googledrive&host=1"
-        define('ELFINDER_GOOGLEDRIVE_CLIENTID',     getenv('ELFINDER_GOOGLEDRIVE_CLIENTID'));
+        define('ELFINDER_GOOGLEDRIVE_CLIENTID', getenv('ELFINDER_GOOGLEDRIVE_CLIENTID'));
         define('ELFINDER_GOOGLEDRIVE_CLIENTSECRET', getenv('ELFINDER_GOOGLEDRIVE_CLIENTSECRET'));
         // ===============================================
         // // Required for One Drive network mount
@@ -159,7 +161,7 @@ class DefaultController extends Controller
         elFinder::$netDrivers['onedrive'] = 'OneDrive';
         // // GoogleDrive Netmount driver need next two settings. You can get at https://dev.onedrive.com
         // // AND reuire regist redirect url to "YOUR_CONNECTOR_URL/netmount/onedrive/1"
-        define('ELFINDER_ONEDRIVE_CLIENTID',     getenv('ELFINDER_ONEDRIVE_CLIENTID'));
+        define('ELFINDER_ONEDRIVE_CLIENTID', getenv('ELFINDER_ONEDRIVE_CLIENTID'));
         define('ELFINDER_ONEDRIVE_CLIENTSECRET', getenv('ELFINDER_ONEDRIVE_CLIENTSECRET'));
         // ===============================================
         // // Required for Box network mount
@@ -168,7 +170,7 @@ class DefaultController extends Controller
         elFinder::$netDrivers['box'] = 'Box';
         // // Box Netmount driver need next two settings. You can get at https://developer.box.com
         // // AND reuire regist redirect url to "YOUR_CONNECTOR_URL"
-        define('ELFINDER_BOX_CLIENTID',     getenv('ELFINDER_BOX_CLIENTID'));
+        define('ELFINDER_BOX_CLIENTID', getenv('ELFINDER_BOX_CLIENTID'));
         define('ELFINDER_BOX_CLIENTSECRET', getenv('ELFINDER_BOX_CLIENTSECRET'));
         // ===============================================
 
@@ -176,55 +178,55 @@ class DefaultController extends Controller
         // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         /**
          * Simple function to demonstrate how to control file access using "accessControl" callback.
-         * This method will disable accessing files/folders starting from '.' (dot)
+         * This method will disable accessing files/folders starting from '.' (dot).
          *
-         * @param  string    $attr    attribute name (read|write|locked|hidden)
-         * @param  string    $path    absolute file path
-         * @param  string    $data    value of volume option `accessControlData`
-         * @param  object    $volume  elFinder volume driver object
-         * @param  bool|null $isDir   path is directory (true: directory, false: file, null: unknown)
-         * @param  string    $relpath file path relative to volume root directory started with directory separator
+         * @param string    $attr    attribute name (read|write|locked|hidden)
+         * @param string    $path    absolute file path
+         * @param string    $data    value of volume option `accessControlData`
+         * @param object    $volume  elFinder volume driver object
+         * @param bool|null $isDir   path is directory (true: directory, false: file, null: unknown)
+         * @param string    $relpath file path relative to volume root directory started with directory separator
          *
          * @return bool|null
          **/
         $accessFunction = function (string $attr, string $path, $data, $volume, $isDir, string $relpath) {
             $basename = basename($path);
-            return $basename[0] === '.'                  // if file/folder begins with '.' (dot)
-                && strlen($relpath) !== 1                // but with out volume root
-                ? !($attr == 'read' || $attr == 'write') // set read+write to false, other (locked+hidden) set to true
-                : null;                                  // else elFinder decide it itself
+
+            return '.' === $basename[0]                    // if file/folder begins with '.' (dot)
+                && 1 !== mb_strlen($relpath)               // but with out volume root
+                ? !('read' === $attr || 'write' === $attr) // set read+write to false, other (locked+hidden) set to true
+                : null;                                    // else elFinder decide it itself
         };
         $opts = [
             // 'debug' => true,
             'roots' => [
-
                 // Items volume
                 [
-                    'alias'         => 'Home',
-                    'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-                    'path'          => realpath($rootCloudDir), // path to files (REQUIRED)
-                    'URL'           => '/h/',                       // URL to files (REQUIRED)
-                    'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
-                    'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny'    => [],                          // All Mimetypes not allowed to upload
-                    'uploadAllow'   => ['all'],                     // Mimetype `image` and `text/plain` allowed to upload
-                    'uploadOrder'   => ['deny', 'allow'],           // allowed Mimetype `image` and `text/plain` only
+                    'alias' => 'Home',
+                    'driver' => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
+                    'path' => realpath($rootCloudDir), // path to files (REQUIRED)
+                    'URL' => '/h/',                       // URL to files (REQUIRED)
+                    'trashHash' => 't1_Lw',                     // elFinder's hash of trash folder
+                    'winHashFix' => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
+                    'uploadDeny' => [],                          // All Mimetypes not allowed to upload
+                    'uploadAllow' => ['all'],                     // Mimetype `image` and `text/plain` allowed to upload
+                    'uploadOrder' => ['deny', 'allow'],           // allowed Mimetype `image` and `text/plain` only
                     'accessControl' => $accessFunction,             // disable and hide dot starting files (OPTIONAL)
                 ],
 
                 // Trash volume
                 [
-                    'id'            => '1',
-                    'driver'        => 'Trash',
-                    'path'          => realpath($rootCloudDir.'/.trash'),
-                    'tmbURL'        => '../var/data/storage/'.$user->getRemoteId().'/.trash/.tmb',
-                    'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny'    => [],                          // Recommend the same settings as the original volume that uses the trash
-                    'uploadAllow'   => ['all'],                     // Same as above
-                    'uploadOrder'   => ['deny', 'allow'],           // Same as above
+                    'id' => '1',
+                    'driver' => 'Trash',
+                    'path' => realpath($rootCloudDir.'/.trash'),
+                    'tmbURL' => '../var/data/storage/'.$user->getRemoteId().'/.trash/.tmb',
+                    'winHashFix' => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
+                    'uploadDeny' => [],                          // Recommend the same settings as the original volume that uses the trash
+                    'uploadAllow' => ['all'],                     // Same as above
+                    'uploadOrder' => ['deny', 'allow'],           // Same as above
                     'accessControl' => $accessFunction,             // Same as above
-                ]
-            ]
+                ],
+            ],
         ];
 
         // Run elFinder
