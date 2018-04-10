@@ -11,7 +11,8 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Working webserver (PHP is a must)
+Webserver (PHP 7.2+)
+Database (e. g. MySql)
 ```
 
 ### Installing
@@ -33,19 +34,24 @@ composer install --no-dev --optimize-autoloader
 Next, rename `.env.dist` to `.env` and change following parameters:
 
 ```
-# Create a Dev App on orbitrondev.org and insert info here
-OAUTH_CLIENT_ID="app_id"
-OAUTH_CLIENT_SECRET=app_secret
+OAUTH_CLIENT_ID="..." (OAuth2 Client from orbitrondev.org)
+OAUTH_CLIENT_SECRET=... (OAuth2 Client from orbitrondev.org)
+
+APP_ENV=prod
+APP_SECRET=...
 
 DATABASE_URL=... (Accessing databse)
 ```
 
 ## Built With
 
-* [Composer](https://getcomposer.org/) - PHP Package manager
-* [Symfony](https://symfony.com/) - PHP Framework
-* [Bootstrap](https://getbootstrap.com/) - Template used in this service
-* [ElFinder](https://studio-42.github.io/elFinder/) - Tool to access file systems
+* [Composer](https://getcomposer.org) - PHP Package manager
+* [Symfony](https://symfony.com) - PHP Framework
+* [Doctrine](https://www.doctrine-project.org) - PHP Database accessing
+* [Twig](https://twig.symfony.com) - PHP Templating service
+* [ReCaptcha](https://www.google.com/recaptcha) - Captcha service from Google
+* [Bootstrap](https://getbootstrap.com) - Theme used in this service
+* [Unify](https://wrapbootstrap.com/theme/unify-responsive-website-template-WB0412697) - Theme used in this service
 
 ## Contributing
 
