@@ -22,13 +22,13 @@ A step by step series of examples that tell you have to get a development env ru
 Clone the project from github
 
 ```bash
-git clone https://github.com/OrbitronDev/service-cloud
+$ git clone https://github.com/OrbitronDev/service-cloud
 ```
 
 Setup the project with composer
 
 ```bash
-composer install --no-dev --optimize-autoloader
+$ composer install --no-dev --optimize-autoloader
 ```
 
 Next, rename `.env.dist` to `.env` and change following parameters:
