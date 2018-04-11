@@ -36,6 +36,7 @@ Next, rename `.env.dist` to `.env` and change following parameters:
 ```
 OAUTH_CLIENT_ID="..." (OAuth2 Client from orbitrondev.org)
 OAUTH_CLIENT_SECRET=... (OAuth2 Client from orbitrondev.org)
+OAUTH_URL=... (Only needed if the account service is somewhere else) -> (Optional)
 
 APP_ENV=prod
 APP_SECRET=...
