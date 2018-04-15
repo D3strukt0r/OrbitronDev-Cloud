@@ -4,22 +4,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css" />
 
     <!-- elFinder CSS (REQUIRED) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31/css/elfinder.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31/css/theme.min.css" />
-    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/vendor/elFinder-Material-Theme/Material/css/theme-gray.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2.1.32/css/elfinder.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2/css/theme.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/elfinder-material-theme@2/Material/css/theme-gray.min.css" />
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1/jquery-ui.min.js"></script>
 
     <!-- elFinder JS (REQUIRED) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31/js/elfinder.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2/js/elfinder.min.js"></script>
 
     <!-- Extra contents editors (OPTIONAL) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31/js/extras/editors.default.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2/js/extras/editors.default.min.js"></script>
 
     <!-- GoogleDocs Quicklook plugin for GoogleDrive Volume (OPTIONAL) -->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31/js/extras/quicklook.googledocs.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2/js/extras/quicklook.googledocs.min.js"></script>-->
 
     <!-- elFinder initialization (REQUIRED) -->
     <script>
@@ -29,10 +29,10 @@
             var elf = $('#elfinder').elfinder(
                 // 1st Arg - options
                 {
-                    cssAutoLoad: false,               // Disable CSS auto loading
-                    baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.31', // Base URL to css/*, js/*
-                    url: '{{ path('connector') }}', // connector URL (REQUIRED)
-                    // , lang: 'ru'                    // language (OPTIONAL)
+                    cssAutoLoad: false,                                          // Disable CSS auto loading
+                    baseUrl: 'https://cdn.jsdelivr.net/gh/Studio-42/elfinder@2', // Base URL to css/*, js/*
+                    url: '{{ path('connector') }}',                              // connector URL (REQUIRED)
+                    // , lang: 'ru'                                              // language (OPTIONAL)
                     height : $(window).height(),
                     resizable: false
                 },
