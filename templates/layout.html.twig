@@ -71,10 +71,10 @@
                                 <li class="nav-item g-my-5"><a href="#!" class="nav-link">{{ 'general.link.faq'|trans }}</a></li>
                                 {% if app.user.id > -1 %}
                                     <li class="nav-item hs-has-sub-menu g-my-5">
-                                        <a href="https://account.orbitrondev.org" class="nav-link" id="nav-link-1" aria-haspopup="true" aria-expanded="false" aria-controls="nav-submenu-1">{{ app.user.username }}</a>
+                                        <a href="{{ getenv('OAUTH_URL') }}" class="nav-link" id="nav-link-1" aria-haspopup="true" aria-expanded="false" aria-controls="nav-submenu-1">{{ app.user.username }}</a>
                                         <!-- Submenu -->
                                         <ul class="hs-sub-menu list-unstyled animated" id="nav-submenu-1" aria-labelledby="nav-link-1" style="display: none;">
-                                            <li><a href="https://account.orbitrondev.org">{{ 'general.link.settings'|trans }}</a></li>
+                                            <li><a href="{{ getenv('OAUTH_URL') }}">{{ 'general.link.settings'|trans }}</a></li>
                                             <li><a href="{{ path('logout') }}">{{ 'general.link.logout'|trans }}</a></li>
                                         </ul>
                                         <!-- End Submenu -->
@@ -87,22 +87,22 @@
                         <div class="text-center g-hidden-lg-down">
                             <ul class="list-inline g-mb-10">
                                 <li class="list-inline-item g-mx-10" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
-                                    <a href="#!" class="g-color-main g-color-primary--hover">
+                                    <a href="https://www.facebook.com/manuele.vaccari" class="g-color-main g-color-primary--hover">
                                         <i class="fa fa-facebook"></i>
                                     </a>
                                 </li>
+                                <li class="list-inline-item g-mx-10" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
+                                    <a href="https://twitter.com/ManueleVaccari" class="g-color-main g-color-primary--hover">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
                                 <li class="list-inline-item g-mx-10" data-toggle="tooltip" data-placement="top" title="" data-original-title="Instagram">
-                                    <a href="#!" class="g-color-main g-color-primary--hover">
+                                    <a href="https://plus.google.com/+ManueleVaccari" class="g-color-main g-color-primary--hover">
                                         <i class="fa fa-google-plus"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item g-mx-10" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
-                                    <a href="#!" class="g-color-main g-color-primary--hover">
-                                        <i class="fa fa-twitter"></i>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item g-mx-10" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
-                                    <a href="#!" class="g-color-main g-color-primary--hover">
+                                    <a href="https://github.com/D3strukt0r/service-cloud" class="g-color-main g-color-primary--hover">
                                         <i class="fa fa-github"></i>
                                     </a>
                                 </li>

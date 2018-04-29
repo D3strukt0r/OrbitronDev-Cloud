@@ -140,9 +140,6 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
-    "orbitrondev/oauth2-orbitrondev": {
-        "version": "0.0.1"
-    },
     "paragonie/random_compat": {
         "version": "v2.0.11"
     },
