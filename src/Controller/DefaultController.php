@@ -25,8 +25,7 @@ class DefaultController extends Controller
         $accessToken = unserialize($user->getTokenData());
 
         $registry = $this->get('oauth2.registry');
-        $currentClient = 'prod' === $this->get('kernel')->getEnvironment() ? 'orbitrondev' : 'orbitrondev_dev';
-        $client = $registry->getClient($currentClient);
+        $client = $registry->getClient('orbitrondev');
         // access the underlying "provider" from league/oauth2-client
         $provider = $client->getOAuth2Provider();
 
@@ -51,8 +50,7 @@ class DefaultController extends Controller
     private function askForPermission(array $scopes)
     {
         $registry = $this->get('oauth2.registry');
-        $currentClient = 'prod' === $this->get('kernel')->getEnvironment() ? 'orbitrondev' : 'orbitrondev_dev';
-        $client = $registry->getClient($currentClient);
+        $client = $registry->getClient('orbitrondev');
 
         return $client->redirect($scopes);
     }
@@ -151,8 +149,8 @@ class DefaultController extends Controller
         elFinder::$netDrivers['googledrive'] = 'GoogleDrive';
         // // GoogleDrive Netmount driver need next two settings. You can get at https://console.developers.google.com
         // // AND reuire regist redirect url to "YOUR_CONNECTOR_URL?cmd=netmount&protocol=googledrive&host=1"
-        define('ELFINDER_GOOGLEDRIVE_CLIENTID', getenv('ELFINDER_GOOGLEDRIVE_CLIENTID'));
-        define('ELFINDER_GOOGLEDRIVE_CLIENTSECRET', getenv('ELFINDER_GOOGLEDRIVE_CLIENTSECRET'));
+        define('ELFINDER_GOOGLEDRIVE_CLIENTID', getenv('GOOGLE_CLIENT_ID'));
+        define('ELFINDER_GOOGLEDRIVE_CLIENTSECRET', getenv('GOOGLE_CLIENT_SECRET'));
         // ===============================================
         // // Required for One Drive network mount
         // //  * cURL PHP extension required
