@@ -6,6 +6,7 @@ use elFinder;
 use elFinderConnector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
@@ -64,6 +65,9 @@ class DefaultController extends Controller
         return array_key_exists($data, $this->cachedData);
     }
 
+    /**
+     * @Route("/", name="index")
+     */
     public function index()
     {
         /** @var \App\Entity\User|null $user */
@@ -75,6 +79,9 @@ class DefaultController extends Controller
         return $this->redirectToRoute('files');
     }
 
+    /**
+     * @Route("/h", name="files")
+     */
     public function files()
     {
         /** @var \App\Entity\User|null $user */
@@ -86,6 +93,9 @@ class DefaultController extends Controller
         return $this->render('files.html.twig');
     }
 
+    /**
+     * @Route("/h/{file}", name="show_file", requirements={"file": ".+"})
+     */
     public function showRawFile($file)
     {
         /** @var \App\Entity\User|null $user */
@@ -117,6 +127,9 @@ class DefaultController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/connector", name="connector")
+     */
     public function connector()
     {
         /** @var \App\Entity\User|null $user */
