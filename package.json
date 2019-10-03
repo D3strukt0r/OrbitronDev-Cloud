@@ -1,16 +1,20 @@
 {
-    "devDependencies": {
-        "@symfony/webpack-encore": "^0.22.3"
-    },
-    "license": "UNLICENSED",
-    "private": true,
-    "scripts": {
-        "dev-server": "encore dev-server",
-        "dev": "encore dev",
-        "watch": "encore dev --watch",
-        "build": "encore production"
-    },
-    "dependencies": {
-        "npm": "^6.4.1"
-    }
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.22.3"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "dependencies": {
+    "npm": "^6.4.1",
+    "snyk": "^1.230.5"
+  },
+  "snyk": true
 }
