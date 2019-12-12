@@ -11,6 +11,6 @@
         "build": "encore production"
     },
     "dependencies": {
-        "npm": "^6.4.1"
+        "npm": "^6.13.4"
     }
 }
