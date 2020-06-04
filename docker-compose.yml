@@ -35,6 +35,8 @@ services:
       - db
     networks:
       - internal
+    volumes:
+      - data:/data
     environment:
       UPLOAD_LIMIT: 100M
 
@@ -89,3 +91,4 @@ networks:
 
 volumes:
   database:
+  data:

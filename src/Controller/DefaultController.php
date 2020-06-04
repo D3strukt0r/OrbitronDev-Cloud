@@ -107,10 +107,10 @@ class DefaultController extends AbstractController
         // Create directories
         $rootCloudDir = $kernel->getProjectDir().'/var/data/storage/'.$user->getRemoteId();
         if (!file_exists($rootCloudDir)) {
-            mkdir($rootCloudDir, 0777, true);
+            mkdir($rootCloudDir, 0755, true);
         }
         if (!file_exists($rootCloudDir.'/.trash/')) {
-            mkdir($rootCloudDir.'/.trash/', 0777, true);
+            mkdir($rootCloudDir.'/.trash/', 0755, true);
         }
 
         // ===============================================
