@@ -2,75 +2,31 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use const DIRECTORY_SEPARATOR;
 use elFinder;
 use elFinderConnector;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Exception;
+use League\OAuth2\Client\Token\AccessToken;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     private $cachedData;
     private $dataWasLoaded = false;
-
-    private function getDataFromToken($updateCache = false): array
-    {
-        if (!$updateCache && is_array($this->cachedData)) {
-            return $this->cachedData;
-        }
-
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-        /** @var \League\OAuth2\Client\Token\AccessToken $accessToken */
-        $accessToken = unserialize($user->getTokenData());
-
-        $registry = $this->get('oauth2.registry');
-        $client = $registry->getClient('orbitrondev');
-        // access the underlying "provider" from league/oauth2-client
-        $provider = $client->getOAuth2Provider();
-
-        if ($accessToken->hasExpired()) {
-            $accessToken = $provider->getAccessToken('refresh_token', [
-                'refresh_token' => $accessToken->getRefreshToken(),
-            ]);
-
-            // Purge old access token and store new access token to your data store.
-            $user->setTokenData(serialize($accessToken));
-            $this->getDoctrine()->getManager()->flush();
-        }
-
-        // get access token and then user
-        $resourceOwner = $client->fetchUserFromToken($accessToken);
-        $this->dataWasLoaded = true;
-        $this->cachedData = $resourceOwner->toArray();
-
-        return $this->cachedData;
-    }
-
-    private function askForPermission(array $scopes)
-    {
-        $registry = $this->get('oauth2.registry');
-        $client = $registry->getClient('orbitrondev');
-
-        return $client->redirect($scopes);
-    }
-
-    private function hasAccessToData($data)
-    {
-        if (!$this->dataWasLoaded) {
-            $data = $this->getDataFromToken();
-        }
-
-        return array_key_exists($data, $this->cachedData);
-    }
 
     /**
      * @Route("/", name="index")
      */
     public function index()
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -84,7 +40,7 @@ class DefaultController extends Controller
      */
     public function files()
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -95,10 +51,14 @@ class DefaultController extends Controller
 
     /**
      * @Route("/h/{file}", name="show_file", requirements={"file": ".+"})
+     *
+     * @param string $file The file
+     *
+     * @return RedirectResponse|Response
      */
-    public function showRawFile($file)
+    public function showRawFile(string $file)
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login');
@@ -129,17 +89,23 @@ class DefaultController extends Controller
 
     /**
      * @Route("/connector", name="connector")
+     *
+     * @param KernelInterface $kernel The kernel
+     *
+     * @throws Exception
+     *
+     * @return JsonResponse
      */
-    public function connector()
+    public function connector(KernelInterface $kernel)
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->json([]);
         }
 
         // Create directories
-        $rootCloudDir = $this->get('kernel')->getProjectDir().'/var/data/storage/'.$user->getRemoteId();
+        $rootCloudDir = $kernel->getProjectDir().'/var/data/storage/'.$user->getRemoteId();
         if (!file_exists($rootCloudDir)) {
             mkdir($rootCloudDir, 0777, true);
         }
@@ -199,12 +165,12 @@ class DefaultController extends Controller
          * @param string    $relpath file path relative to volume root directory started with directory separator
          *
          * @return bool|null
-         **/
+         */
         $accessFunction = function (string $attr, string $path, $data, $volume, $isDir, string $relpath) {
             $basename = basename($path);
 
             return '.' === $basename[0]                    // if file/folder begins with '.' (dot)
-                && 1 !== mb_strlen($relpath)               // but with out volume root
+            && 1 !== mb_strlen($relpath)                   // but with out volume root
                 ? !('read' === $attr || 'write' === $attr) // set read+write to false, other (locked+hidden) set to true
                 : null;                                    // else elFinder decide it itself
         };
@@ -214,15 +180,24 @@ class DefaultController extends Controller
                 // Items volume
                 [
                     'alias' => 'Home',
-                    'driver' => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-                    'path' => realpath($rootCloudDir), // path to files (REQUIRED)
-                    'URL' => '/h/',                       // URL to files (REQUIRED)
-                    'trashHash' => 't1_Lw',                     // elFinder's hash of trash folder
-                    'winHashFix' => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny' => [],                          // All Mimetypes not allowed to upload
-                    'uploadAllow' => ['all'],                     // Mimetype `image` and `text/plain` allowed to upload
-                    'uploadOrder' => ['deny', 'allow'],           // allowed Mimetype `image` and `text/plain` only
-                    'accessControl' => $accessFunction,             // disable and hide dot starting files (OPTIONAL)
+                    // driver for accessing file system (REQUIRED)
+                    'driver' => 'LocalFileSystem',
+                    // path to files (REQUIRED)
+                    'path' => realpath($rootCloudDir),
+                    // URL to files (REQUIRED)
+                    'URL' => '/h/',
+                    // elFinder's hash of trash folder
+                    'trashHash' => 't1_Lw',
+                    // to make hash same to Linux one on windows too
+                    'winHashFix' => DIRECTORY_SEPARATOR !== '/',
+                    // All Mimetypes not allowed to upload
+                    'uploadDeny' => [],
+                    // Mimetype `image` and `text/plain` allowed to upload
+                    'uploadAllow' => ['all'],
+                    // allowed Mimetype `image` and `text/plain` only
+                    'uploadOrder' => ['deny', 'allow'],
+                    // disable and hide dot starting files (OPTIONAL)
+                    'accessControl' => $accessFunction,
                 ],
 
                 // Trash volume
@@ -231,11 +206,16 @@ class DefaultController extends Controller
                     'driver' => 'Trash',
                     'path' => realpath($rootCloudDir.'/.trash'),
                     'tmbURL' => '../var/data/storage/'.$user->getRemoteId().'/.trash/.tmb',
-                    'winHashFix' => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-                    'uploadDeny' => [],                          // Recommend the same settings as the original volume that uses the trash
-                    'uploadAllow' => ['all'],                     // Same as above
-                    'uploadOrder' => ['deny', 'allow'],           // Same as above
-                    'accessControl' => $accessFunction,             // Same as above
+                    // to make hash same to Linux one on windows too
+                    'winHashFix' => DIRECTORY_SEPARATOR !== '/',
+                    // Recommend the same settings as the original volume that uses the trash
+                    'uploadDeny' => [],
+                    // Same as above
+                    'uploadAllow' => ['all'],
+                    // Same as above
+                    'uploadOrder' => ['deny', 'allow'],
+                    // Same as above
+                    'accessControl' => $accessFunction,
                 ],
             ],
         ];
@@ -244,5 +224,59 @@ class DefaultController extends Controller
         $connector = new elFinderConnector(new elFinder($opts));
         $connector->run();
         exit;
+    }
+
+    private function getDataFromToken($updateCache = false): array
+    {
+        if (!$updateCache && is_array($this->cachedData)) {
+            return $this->cachedData;
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var AccessToken $accessToken */
+        $accessToken = unserialize($user->getTokenData());
+
+        $registry = $this->get('oauth2.registry');
+        $client = $registry->getClient('generation2');
+        // access the underlying "provider" from league/oauth2-client
+        $provider = $client->getOAuth2Provider();
+
+        if ($accessToken->hasExpired()) {
+            $accessToken = $provider->getAccessToken(
+                'refresh_token',
+                [
+                    'refresh_token' => $accessToken->getRefreshToken(),
+                ]
+            );
+
+            // Purge old access token and store new access token to your data store.
+            $user->setTokenData(serialize($accessToken));
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        // get access token and then user
+        $resourceOwner = $client->fetchUserFromToken($accessToken);
+        $this->dataWasLoaded = true;
+        $this->cachedData = $resourceOwner->toArray();
+
+        return $this->cachedData;
+    }
+
+    private function askForPermission(array $scopes)
+    {
+        $registry = $this->get('oauth2.registry');
+        $client = $registry->getClient('orbitrondev');
+
+        return $client->redirect($scopes);
+    }
+
+    private function hasAccessToData($data)
+    {
+        if (!$this->dataWasLoaded) {
+            $data = $this->getDataFromToken();
+        }
+
+        return array_key_exists($data, $this->cachedData);
     }
 }

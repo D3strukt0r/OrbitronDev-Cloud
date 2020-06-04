@@ -2,28 +2,36 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Exception;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
     /**
      * @Route("/login", name="login")
+     *
+     * @param ClientRegistry $clientRegistry The OAuth2 client registry
+     *
+     * @return RedirectResponse
      */
-    public function login()
+    public function login(ClientRegistry $clientRegistry)
     {
-        /** @var \KnpU\OAuth2ClientBundle\Security\User\OAuthUser $user */
+        /** @var OAuthUser $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('index');
         }
 
-        return $this->get('oauth2.registry')
-            ->getClient('orbitrondev')
-            ->redirect(['user:email', 'user:username', 'user:id']);
+        return $clientRegistry
+            ->getClient('generation2')
+            ->redirect(['user:email', 'user:username', 'user:id'])
+            ;
     }
-
 
     /**
      * This is the route the user can use to logout.
@@ -32,10 +40,12 @@ class UserController extends Controller
      * and handle the logout automatically. See logout in config/packages/security.yaml
      *
      * @Route("/logout", name="logout")
+     *
+     * @throws Exception
      */
     public function logout(): void
     {
-        throw new \Exception('This should never be reached!');
+        throw new Exception('This should never be reached!');
     }
 
     /**
@@ -45,9 +55,11 @@ class UserController extends Controller
      * and handle the logout automatically. See logout in config/packages/security.yaml
      *
      * @Route("/login-check", name="login_check")
+     *
+     * @throws Exception
      */
     public function login_check(): void
     {
-        throw new \Exception('This should never be reached!');
+        throw new Exception('This should never be reached!');
     }
 }
