@@ -2,6 +2,50 @@
 
 Get access to a cloud using an OrbitronDev account
 
+**Project**
+
+| [License][license]                  | Versions ([Packagist][packagist])                                                                                                 | Downloads ([Packagist][packagist])                     | Required PHP Version                           |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|------------------------------------------------|
+| [![License][license-icon]][license] | Release: [![Version][release-icon]][packagist]<br>Pre-Release: [![Version (including pre-releases)][pre-release-icon]][packagist] | [![Downloads on Packagist][downloads-icon]][packagist] | [![Required PHP version][php-icon]][packagist] |
+
+**master**-branch (alias stable, latest)
+
+| [Travis CI][travis]                           | [Coveralls][coveralls]                           | [Scrutinizer CI][scrutinizer]                                                                                                     | [Codacy][codacy]                              | [Read the Docs][rtfd]                   |
+|-----------------------------------------------|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|-----------------------------------------|
+| [![Travis build][travis-master-icon]][travis] | [![Coveralls][coveralls-master-icon]][coveralls] | [![Scrutinizer build][scrutinizer-master-icon]][scrutinizer]<br>[![Scrutinizer quality][scrutinizer-cc-master-icon]][scrutinizer] | [![Codacy grade][codacy-master-icon]][codacy] | [![Docs build][rtfd-master-icon]][rtfd] |
+
+**develop**-branch (alias nightly)
+
+| [Travis CI][travis]                            | [Coveralls][coveralls]                            | [Scrutinizer CI][scrutinizer]                                                                                                       | [Codacy][codacy]                               | [Read the Docs][rtfd]                    |
+|------------------------------------------------|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|------------------------------------------|
+| [![Travis build][travis-develop-icon]][travis] | [![Coveralls][coveralls-develop-icon]][coveralls] | [![Scrutinizer build][scrutinizer-develop-icon]][scrutinizer]<br>[![Scrutinizer quality][scrutinizer-cc-develop-icon]][scrutinizer] | [![Codacy grade][codacy-develop-icon]][codacy] | [![Docs build][rtfd-develop-icon]][rtfd] |
+
+[license]: https://github.com/D3strukt0r/generation-2-cloud-api/blob/master/LICENSE.txt
+[packagist]: https://packagist.org/packages/d3strukt0r/generation-2-cloud-api
+[travis]: https://travis-ci.com/D3strukt0r/generation-2-cloud-api
+[coveralls]: https://coveralls.io/github/D3strukt0r/generation-2-cloud-api
+[scrutinizer]: https://scrutinizer-ci.com/g/D3strukt0r/generation-2-cloud-api/
+[rtfd]: https://readthedocs.org/projects/generation-2-cloud-api/
+[codacy]: https://app.codacy.com/manual/D3strukt0r/generation-2-cloud-api/dashboard
+
+[license-icon]: https://img.shields.io/github/license/D3strukt0r/generation-2-cloud-api
+[release-icon]: https://img.shields.io/packagist/v/d3strukt0r/generation-2-cloud-api
+[pre-release-icon]: https://img.shields.io/packagist/v/d3strukt0r/generation-2-cloud-api?include_prereleases
+[downloads-icon]: https://img.shields.io/packagist/dt/d3strukt0r/generation-2-cloud-api
+[php-icon]: https://img.shields.io/packagist/php-v/d3strukt0r/generation-2-cloud-api
+[travis-master-icon]: https://img.shields.io/travis/com/D3strukt0r/generation-2-cloud-api/master
+[travis-develop-icon]: https://img.shields.io/travis/com/D3strukt0r/generation-2-cloud-api/develop
+[coveralls-master-icon]: https://img.shields.io/coveralls/github/D3strukt0r/generation-2-cloud-api/master
+[coveralls-develop-icon]: https://img.shields.io/coveralls/github/D3strukt0r/generation-2-cloud-api/develop
+[scrutinizer-master-icon]: https://img.shields.io/scrutinizer/build/g/D3strukt0r/generation-2-cloud-api/master
+[scrutinizer-develop-icon]: https://img.shields.io/scrutinizer/build/g/D3strukt0r/generation-2-cloud-api/develop
+[scrutinizer-cc-master-icon]: https://img.shields.io/scrutinizer/quality/g/D3strukt0r/generation-2-cloud-api/master
+[scrutinizer-cc-develop-icon]: https://img.shields.io/scrutinizer/quality/g/D3strukt0r/generation-2-cloud-api/develop
+[rtfd-master-icon]: https://img.shields.io/readthedocs/generation-2-cloud-api/stable
+[rtfd-develop-icon]: https://img.shields.io/readthedocs/generation-2-cloud-api/latest
+[codacy-master-icon]: https://img.shields.io/codacy/grade/aad066cd166044339993f1cd85569a53/master
+[codacy-develop-icon]: https://img.shields.io/codacy/grade/aad066cd166044339993f1cd85569a53/develop
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -46,6 +90,7 @@ DATABASE_URL=... (Accessing databse)
 
 ## Built With
 
+* [PHP](https://www.php.net) - Programming Language
 * [Composer](https://getcomposer.org) - PHP Package manager
 * [Symfony](https://symfony.com) - PHP Framework
 * [Doctrine](https://www.doctrine-project.org) - PHP Database accessing
@@ -53,25 +98,33 @@ DATABASE_URL=... (Accessing databse)
 * [ReCaptcha](https://www.google.com/recaptcha) - Captcha service from Google
 * [Bootstrap](https://getbootstrap.com) - Theme used in this service
 * [Unify](https://wrapbootstrap.com/theme/unify-responsive-website-template-WB0412697) - Theme used in this service
+* [Travis CI](https://travis-ci.com) - Automatic CI (Testing) / CD (Deployment)
+* [Docker](https://www.docker.com) - Building a Container for the Server
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull
+requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/service-cloud/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the
+[tags on this repository](https://github.com/D3strukt0r/generation-2-cloud-api/tags). 
 
 ## Authors
 
-* **Manuele Vaccari** - *Initial work* - Copied work from previous project [OrbitronDev](https://github.com/D3strukt0r/OrbitronDev)
+* **Manuele Vaccari** - [D3strukt0r](https://github.com/D3strukt0r) - *Initial work*
 
-See also the list of [contributors](https://github.com/D3strukt0r/service-cloud/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/D3strukt0r/generation-2-cloud-api/contributors) who
+participated in this project.
 
 ## License
 
-This project is licensed under a copy of the MEGA Limited Code Review License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for
+details.
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used (Especially Stackoverflow)
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
