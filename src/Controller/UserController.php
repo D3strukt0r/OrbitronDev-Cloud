@@ -58,7 +58,7 @@ class UserController extends AbstractController
      *
      * @throws Exception
      */
-    public function login_check(): void
+    public function loginCheck(): void
     {
         throw new Exception('This should never be reached!');
     }

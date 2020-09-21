@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use const DIRECTORY_SEPARATOR;
 use elFinder;
 use elFinderConnector;
 use Exception;
@@ -15,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use const DIRECTORY_SEPARATOR;
 
 class DefaultController extends AbstractController
 {
@@ -77,7 +78,7 @@ class DefaultController extends AbstractController
             'xml' => 'text/xml',
         ];
 
-        $fileDir = $this->get('kernel')->getProjectDir().'/var/data/storage/'.$user->getRemoteId().'/'.$file;
+        $fileDir = $this->get('kernel')->getProjectDir() . '/var/data/storage/' . $user->getRemoteId() . '/' . $file;
         $fileInfo = pathinfo($fileDir);
 
         $response = new Response();
@@ -105,12 +106,12 @@ class DefaultController extends AbstractController
         }
 
         // Create directories
-        $rootCloudDir = $kernel->getProjectDir().'/var/data/storage/'.$user->getRemoteId();
+        $rootCloudDir = $kernel->getProjectDir() . '/var/data/storage/' . $user->getRemoteId();
         if (!file_exists($rootCloudDir)) {
             mkdir($rootCloudDir, 0755, true);
         }
-        if (!file_exists($rootCloudDir.'/.trash/')) {
-            mkdir($rootCloudDir.'/.trash/', 0755, true);
+        if (!file_exists($rootCloudDir . '/.trash/')) {
+            mkdir($rootCloudDir . '/.trash/', 0755, true);
         }
 
         // ===============================================
@@ -204,8 +205,8 @@ class DefaultController extends AbstractController
                 [
                     'id' => '1',
                     'driver' => 'Trash',
-                    'path' => realpath($rootCloudDir.'/.trash'),
-                    'tmbURL' => '../var/data/storage/'.$user->getRemoteId().'/.trash/.tmb',
+                    'path' => realpath($rootCloudDir . '/.trash'),
+                    'tmbURL' => '../var/data/storage/' . $user->getRemoteId() . '/.trash/.tmb',
                     // to make hash same to Linux one on windows too
                     'winHashFix' => DIRECTORY_SEPARATOR !== '/',
                     // Recommend the same settings as the original volume that uses the trash
